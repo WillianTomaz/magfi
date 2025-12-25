@@ -1,16 +1,16 @@
 -- Predictions fact table
-CREATE TABLE IF NOT EXISTS fct_prediction (
+CREATE TABLE IF NOT EXISTS app_magfi.fct_prediction (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    asset_ticker VARCHAR(20),
+    asset_id UUID,
     prediction_type VARCHAR(50) NOT NULL,
-    predicted_price FLOAT,
+    predicted_price NUMERIC(15, 4),
     confidence_score FLOAT NOT NULL,
     prediction_date TIMESTAMP NOT NULL,
-    horizon_days INTEGER,
     analysis_summary TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (asset_id) REFERENCES app_magfi.dim_asset(id) ON DELETE SET NULL
 );
 
-CREATE INDEX idx_prediction_ticker ON fct_prediction(asset_ticker);
-CREATE INDEX idx_prediction_date ON fct_prediction(prediction_date);
-CREATE INDEX idx_prediction_created ON fct_prediction(created_at);
+CREATE INDEX IF NOT EXISTS idx_prediction_asset ON app_magfi.fct_prediction(asset_id);
+CREATE INDEX IF NOT EXISTS idx_prediction_date ON app_magfi.fct_prediction(prediction_date);
+CREATE INDEX IF NOT EXISTS idx_prediction_created ON app_magfi.fct_prediction(created_at);

@@ -1,5 +1,5 @@
 -- Configuration table
-CREATE TABLE IF NOT EXISTS dim_config (
+CREATE TABLE IF NOT EXISTS app_magfi.dim_config (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     config_name VARCHAR(255) NOT NULL UNIQUE,
     config_value TEXT,
@@ -7,10 +7,10 @@ CREATE TABLE IF NOT EXISTS dim_config (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE INDEX idx_config_name ON dim_config(config_name);
+CREATE INDEX idx_config_name ON app_magfi.dim_config(config_name);
 
 -- Insert default configurations
-INSERT INTO dim_config (config_name, config_value) 
+INSERT INTO app_magfi.dim_config (config_name, config_value) 
 VALUES 
     ('app_name', 'magfi-core'),
     ('version', '1.0.0'),
