@@ -1,0 +1,107 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: magfi_postgres
+    environment:
+      POSTGRES_USER: magfi_user
+      POSTGRES_PASSWORD: magfi_password
+      POSTGRES_DB: magfi_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./magfi-core/ddl:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U magfi_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - magfi-network
+
+  magfi-core:
+    build: ./magfi-core
+    container_name: magfi_core
+    environment:
+      DATABASE_URL: postgresql://magfi_user:magfi_password@postgres:5432/magfi_db
+      SUPABASE_URL: ${SUPABASE_URL:-https://example.supabase.co}
+      SUPABASE_KEY: ${SUPABASE_KEY:-example}
+      MAGFI_INGESTOR_URL: http://magfi-ingestor:8001
+      MAGFI_PREDICTOR_URL: http://magfi-predictor:8002
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      APP_ENV: ${APP_ENV:-development}
+      DEBUG: ${DEBUG:-true}
+      API_PORT: 8000
+      API_HOST: 0.0.0.0
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./magfi-core:/app
+    networks:
+      - magfi-network
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  magfi-ingestor:
+    build: ./magfi-ingestor
+    container_name: magfi_ingestor
+    environment:
+      DATABASE_URL: postgresql://magfi_user:magfi_password@postgres:5432/magfi_db
+      SUPABASE_URL: ${SUPABASE_URL:-https://example.supabase.co}
+      SUPABASE_KEY: ${SUPABASE_KEY:-example}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      APP_ENV: ${APP_ENV:-development}
+      DEBUG: ${DEBUG:-true}
+      API_PORT: 8001
+      API_HOST: 0.0.0.0
+      RSS_FEEDS: ${RSS_FEEDS:-https://feeds.bloomberg.com/markets/news.rss}
+      SENTIMENT_ANALYSIS_MODEL: ${SENTIMENT_ANALYSIS_MODEL:-openai}
+    ports:
+      - "8001:8001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./magfi-ingestor:/app
+    networks:
+      - magfi-network
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8001 --reload
+
+  magfi-predictor:
+    build: ./magfi-predictor
+    container_name: magfi_predictor
+    environment:
+      DATABASE_URL: postgresql://magfi_user:magfi_password@postgres:5432/magfi_db
+      SUPABASE_URL: ${SUPABASE_URL:-https://example.supabase.co}
+      SUPABASE_KEY: ${SUPABASE_KEY:-example}
+      APP_ENV: ${APP_ENV:-development}
+      DEBUG: ${DEBUG:-true}
+      API_PORT: 8002
+      API_HOST: 0.0.0.0
+      MAGFI_CORE_URL: http://magfi-core:8000
+      MAGFI_INGESTOR_URL: http://magfi-ingestor:8001
+    ports:
+      - "8002:8002"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      magfi-core:
+        condition: service_started
+    volumes:
+      - ./magfi-predictor:/app
+    networks:
+      - magfi-network
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8002 --reload
+
+volumes:
+  postgres_data:
+
+networks:
+  magfi-network:
+    driver: bridge
