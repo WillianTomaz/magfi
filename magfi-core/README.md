@@ -1,11 +1,13 @@
 # MAGFI - Manage Assets and Get Financial Insights
 
 ## Overview
+
 MAGFI is a financial management API that provides real-time analysis of assets and currencies in financial markets. It helps investors track their portfolio, identify optimal buying moments through price alerts, and make informed investment decisions using financial indicators (P/L ratio, P/VPA).
 
 The system continuously monitors assets and currencies, comparing current market prices with user-defined targets and calculates fair value metrics based on sector comparisons.
 
 ## Core Features
+
 - 📊 Asset and currency tracking with price monitoring
 - 🎯 Smart price drop alerts (time-to-buy indicators)
 - 💰 Financial analysis using P/L and P/VPA indicators
@@ -15,6 +17,7 @@ The system continuously monitors assets and currencies, comparing current market
 - 📰 News-based market analysis (magfi-ingestor)
 
 ## Technology Stack
+
 - **Python 3.14**
 - **FastAPI** - Async web framework
 - **PostgreSQL + Supabase** - Data persistence
@@ -25,6 +28,7 @@ The system continuously monitors assets and currencies, comparing current market
 ## Local Setup
 
 ### Prerequisites
+
 - Python 3.14
 - PostgreSQL 15+
 - pip & virtualenv
@@ -53,7 +57,7 @@ cp .env.example .env
 python -m alembic upgrade head
 
 # Start the application
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
+uvicorn main:app --reload --host 0.0.0.0 --port 8100
 ```
 
 ### Running with Docker
@@ -62,20 +66,22 @@ uvicorn main:app --reload --host 0.0.0.0 --port 8000
 # Build and run with Docker Compose
 docker-compose up --build
 
-# Application will be available at http://localhost:8000
-# Health check: http://localhost:8000/health
-# API documentation: http://localhost:8000/docs
+# Application will be available at http://localhost:8100
+# Health check: http://localhost:8100/health
+# API documentation: http://localhost:8100/docs
 ```
 
 ## API Endpoints
 
 ### Health & Config
+
 - `GET /health` - Health check
 - `GET /config` - Get all configurations
 - `GET /config/?configName=last-update` - Get specific configuration
 - `PUT /config` - Update configuration
 
 ### Assets Management
+
 - `POST /market/asset` - Create new asset
 - `GET /market/asset/?tickerSymbol=AAPL` - Get specific asset
 - `GET /market/assets` - Get all assets
@@ -83,6 +89,7 @@ docker-compose up --build
 - `DELETE /market/asset/?tickerSymbol=AAPL` - Delete asset
 
 ### Currencies Management
+
 - `POST /market/currency` - Create new currency
 - `GET /market/currency/?currencyCode=USD` - Get specific currency
 - `GET /market/currencies` - Get all currencies
@@ -90,11 +97,13 @@ docker-compose up --build
 - `DELETE /market/currency/?currencyCode=USD` - Delete currency
 
 ### Market Analysis & Alerts
+
 - `GET /market/drop-alert/assets` - Assets ready to buy (price targets met)
 - `GET /market/drop-alert/currencies` - Currencies ready to buy (price targets met)
 - `GET /market/report/prediction` - AI-powered market prediction report
 
 ### Portfolio Management
+
 - `GET /market/dividend-gains` - Get portfolio dividend gains
 - `GET /market/accounts` - Get all accounts
 - `POST /market/account` - Create investment account
@@ -102,6 +111,7 @@ docker-compose up --build
 ## Configuration
 
 ### Environment Variables (.env)
+
 ```
 APP_NAME=magfi-core
 APP_ENV=development
@@ -111,17 +121,18 @@ DATABASE_URL=postgresql://user:password@localhost:5432/magfi_db
 SUPABASE_URL=https://your-project.supabase.co
 SUPABASE_KEY=your-supabase-api-key
 
-MAGFI_INGESTOR_URL=http://localhost:8001
-MAGFI_PREDICTOR_URL=http://localhost:8002
+MAGFI_INGESTOR_URL=http://localhost:8200
+MAGFI_PREDICTOR_URL=http://localhost:8300
 
 OPENAI_API_KEY=sk-...
 GEMINI_API_KEY=...
 
-API_PORT=8000
+API_PORT=8100
 LOG_LEVEL=INFO
 ```
 
 ## Project Structure
+
 ```
 magfi-core/
 ├── app/
@@ -145,7 +156,9 @@ magfi-core/
 ```
 
 ## Database Schema
+
 See `ddl/` folder for complete PostgreSQL DDL statements:
+
 - `01_config.sql` - Configuration table
 - `02_assets.sql` - Assets and indicators
 - `03_currencies.sql` - Currency pairs
@@ -171,6 +184,7 @@ pylint app/
 ## API Response Format
 
 ### Success Response
+
 ```json
 {
   "success": true,
@@ -180,6 +194,7 @@ pylint app/
 ```
 
 ### Error Response
+
 ```json
 {
   "success": false,
@@ -196,7 +211,9 @@ pylint app/
 Note: magfi-core operates independently and doesn't require these services to function.
 
 ## Contributing
+
 Follow PEP 8 guidelines. Code should be clean, typed, and well-tested.
 
 ## License
+
 MIT

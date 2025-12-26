@@ -6,6 +6,7 @@ from app.database import Base
 
 class NewsRaw(Base):
     __tablename__ = "stg_news_raw"
+    __table_args__ = {"schema": "app_magfi"}
     
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     feed_source = Column(String(500), nullable=False)
@@ -20,9 +21,10 @@ class NewsRaw(Base):
 
 class NewsAnalysis(Base):
     __tablename__ = "fct_news_analysis"
+    __table_args__ = {"schema": "app_magfi"}
     
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    asset_ticker = Column(String(20), nullable=True)
+    asset_id = Column(UUID(as_uuid=True), nullable=True)
     news_title = Column(String, nullable=False)
     news_content = Column(Text, nullable=False)
     sentiment = Column(String(20), nullable=False)

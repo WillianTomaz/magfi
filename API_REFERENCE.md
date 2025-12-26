@@ -1,21 +1,25 @@
 # MAGFI API Endpoints Reference
 
 ## Base URLs
-- **magfi-core**: http://localhost:8000
-- **magfi-ingestor**: http://localhost:8001
-- **magfi-predictor**: http://localhost:8002
+
+- **magfi-core**: http://localhost:8100
+- **magfi-ingestor**: http://localhost:8200
+- **magfi-predictor**: http://localhost:8300
 
 ---
 
 ## MAGFI-CORE Endpoints
 
 ### Health
+
 ```
 GET /health
 ```
+
 Returns service health status.
 
 **Response:**
+
 ```json
 {
   "status": "healthy",
@@ -30,32 +34,42 @@ Returns service health status.
 ### Configuration Management
 
 #### Get All Configurations
+
 ```
 GET /config
 ```
+
 Retrieves all stored configurations.
 
 **Response:**
+
 ```json
 {
   "success": true,
   "data": [
-    {"id": "uuid", "config_name": "default_currency", "config_value": "BRL"},
-    {"id": "uuid", "config_name": "last_update", "config_value": "2025-12-25..."}
+    { "id": "uuid", "config_name": "default_currency", "config_value": "BRL" },
+    {
+      "id": "uuid",
+      "config_name": "last_update",
+      "config_value": "2025-12-25..."
+    }
   ],
   "message": "Configuration retrieved successfully"
 }
 ```
 
 #### Get Specific Configuration
+
 ```
 GET /config?configName=last-update
 ```
 
 **Query Parameters:**
+
 - `configName` (required): Configuration key name
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -69,11 +83,13 @@ GET /config?configName=last-update
 ```
 
 #### Update Configuration
+
 ```
 PUT /config
 ```
 
 **Body (JSON):**
+
 ```json
 {
   "default_currency": "USD",
@@ -83,12 +99,17 @@ PUT /config
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
   "data": [
-    {"id": "uuid", "config_name": "default_currency", "config_value": "USD"},
-    {"id": "uuid", "config_name": "name", "config_value": "My Financial Portfolio"}
+    { "id": "uuid", "config_name": "default_currency", "config_value": "USD" },
+    {
+      "id": "uuid",
+      "config_name": "name",
+      "config_value": "My Financial Portfolio"
+    }
   ],
   "message": "Configuration updated successfully"
 }
@@ -99,17 +120,19 @@ PUT /config
 ### Asset Management
 
 #### Create Asset
+
 ```
 POST /market/asset
 ```
 
 **Body (JSON):**
+
 ```json
 {
   "name": "AAPL",
   "currency_code": "USD",
   "current_price": 273.67,
-  "target_price": 270.00,
+  "target_price": 270.0,
   "drop_alert": true,
   "target_gap_percentage": 1.34,
   "sector": "Technology",
@@ -122,6 +145,7 @@ POST /market/asset
 **Optional Fields:** `currency_code` (default: "BRL"), `target_price`, `drop_alert`, etc.
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -135,11 +159,13 @@ POST /market/asset
 ```
 
 #### Get All Assets
+
 ```
 GET /market/assets
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -150,7 +176,7 @@ GET /market/assets
       "asset_name": "AAPL",
       "currency_code": "USD",
       "current_price": 273.67,
-      "target_price": 270.00,
+      "target_price": 270.0,
       "drop_alert_enabled": true,
       "time_to_buy": false
     }
@@ -160,14 +186,17 @@ GET /market/assets
 ```
 
 #### Get Specific Asset
+
 ```
 GET /market/asset?tickerSymbol=AAPL
 ```
 
 **Query Parameters:**
+
 - `tickerSymbol` (required): Stock ticker symbol
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -177,7 +206,7 @@ GET /market/asset?tickerSymbol=AAPL
     "asset_name": "AAPL",
     "currency_code": "USD",
     "current_price": 273.67,
-    "target_price": 270.00,
+    "target_price": 270.0,
     "drop_alert_enabled": true,
     "time_to_buy": false,
     "sector": "Technology",
@@ -189,40 +218,47 @@ GET /market/asset?tickerSymbol=AAPL
 ```
 
 #### Update Asset
+
 ```
 PUT /market/asset?tickerSymbol=AAPL
 ```
 
 **Query Parameters:**
+
 - `tickerSymbol` (required): Stock ticker symbol
 
 **Body (JSON):**
+
 ```json
 {
-  "current_price": 275.00,
-  "target_price": 272.00,
+  "current_price": 275.0,
+  "target_price": 272.0,
   "drop_alert": true
 }
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
-  "data": {"ticker_symbol": "AAPL"},
+  "data": { "ticker_symbol": "AAPL" },
   "message": "Asset updated successfully"
 }
 ```
 
 #### Delete Asset
+
 ```
 DELETE /market/asset?tickerSymbol=AAPL
 ```
 
 **Query Parameters:**
+
 - `tickerSymbol` (required): Stock ticker symbol
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -236,17 +272,19 @@ DELETE /market/asset?tickerSymbol=AAPL
 ### Currency Management
 
 #### Create Currency
+
 ```
 POST /market/currency
 ```
 
 **Body (JSON):**
+
 ```json
 {
   "name": "USD",
   "base_currency": "BRL",
   "current_price": 5.54,
-  "target_price": 5.00,
+  "target_price": 5.0,
   "drop_alert": true
 }
 ```
@@ -255,6 +293,7 @@ POST /market/currency
 **Optional Fields:** `base_currency`, `target_price`, `drop_alert`
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -267,11 +306,13 @@ POST /market/currency
 ```
 
 #### Get All Currencies
+
 ```
 GET /market/currencies
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -282,7 +323,7 @@ GET /market/currencies
       "currency_name": "USD",
       "base_currency": "BRL",
       "current_price": 5.54,
-      "target_price": 5.00,
+      "target_price": 5.0,
       "drop_alert_enabled": true,
       "time_to_buy": false
     }
@@ -292,14 +333,17 @@ GET /market/currencies
 ```
 
 #### Get Specific Currency
+
 ```
 GET /market/currency?currencyCode=USD
 ```
 
 **Query Parameters:**
+
 - `currencyCode` (required): Currency code (e.g., USD, EUR, AUD)
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -309,7 +353,7 @@ GET /market/currency?currencyCode=USD
     "currency_name": "USD",
     "base_currency": "BRL",
     "current_price": 5.54,
-    "target_price": 5.00,
+    "target_price": 5.0,
     "drop_alert_enabled": true,
     "time_to_buy": false
   },
@@ -318,40 +362,47 @@ GET /market/currency?currencyCode=USD
 ```
 
 #### Update Currency
+
 ```
 PUT /market/currency?currencyCode=USD
 ```
 
 **Query Parameters:**
+
 - `currencyCode` (required): Currency code
 
 **Body (JSON):**
+
 ```json
 {
-  "current_price": 5.40,
-  "target_price": 5.00,
+  "current_price": 5.4,
+  "target_price": 5.0,
   "drop_alert": true
 }
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
-  "data": {"currency_code": "USD"},
+  "data": { "currency_code": "USD" },
   "message": "Currency updated successfully"
 }
 ```
 
 #### Delete Currency
+
 ```
 DELETE /market/currency?currencyCode=USD
 ```
 
 **Query Parameters:**
+
 - `currencyCode` (required): Currency code
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -365,6 +416,7 @@ DELETE /market/currency?currencyCode=USD
 ### Market Alerts & Analysis
 
 #### Get Drop Alert Assets
+
 ```
 GET /market/drop-alert/assets
 ```
@@ -372,11 +424,13 @@ GET /market/drop-alert/assets
 Returns assets that have reached or fallen below their target price (ready to buy).
 
 **Requirements:**
+
 - Asset must have `drop_alert` = true
 - Asset must have `target_price` defined
 - Current price ≤ target price
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -385,8 +439,8 @@ Returns assets that have reached or fallen below their target price (ready to bu
       "id": "uuid",
       "ticker_symbol": "AAPL",
       "asset_name": "AAPL",
-      "current_price": 269.50,
-      "target_price": 270.00,
+      "current_price": 269.5,
+      "target_price": 270.0,
       "time_to_buy": true,
       "gap_percentage": 0.18
     }
@@ -396,6 +450,7 @@ Returns assets that have reached or fallen below their target price (ready to bu
 ```
 
 #### Get Drop Alert Currencies
+
 ```
 GET /market/drop-alert/currencies
 ```
@@ -403,11 +458,13 @@ GET /market/drop-alert/currencies
 Returns currencies that have reached or fallen below their target price.
 
 **Requirements:**
+
 - Currency must have `drop_alert` = true
 - Currency must have `target_price` defined
 - Current price ≤ target price
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -417,9 +474,9 @@ Returns currencies that have reached or fallen below their target price.
       "currency_code": "USD",
       "currency_name": "USD",
       "current_price": 4.98,
-      "target_price": 5.00,
+      "target_price": 5.0,
       "time_to_buy": true,
-      "gap_percentage": 0.40
+      "gap_percentage": 0.4
     }
   ],
   "message": "Found 1 currencies ready to buy"
@@ -427,6 +484,7 @@ Returns currencies that have reached or fallen below their target price.
 ```
 
 #### Get Market Prediction Report
+
 ```
 GET /market/report/prediction
 ```
@@ -434,6 +492,7 @@ GET /market/report/prediction
 Fetches AI-powered market predictions from magfi-predictor service.
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -441,13 +500,13 @@ Fetches AI-powered market predictions from magfi-predictor service.
     {
       "ticker": "AAPL",
       "current_price": 273.67,
-      "predicted_price": 275.50,
+      "predicted_price": 275.5,
       "confidence": 0.72,
       "direction": "bullish"
     },
     {
       "ticker": "IBM",
-      "current_price": 180.00,
+      "current_price": 180.0,
       "predicted_price": 177.25,
       "confidence": 0.65,
       "direction": "bearish"
@@ -462,17 +521,19 @@ Fetches AI-powered market predictions from magfi-predictor service.
 ### Account & Portfolio Management
 
 #### Create Account
+
 ```
 POST /market/account
 ```
 
 **Body (JSON):**
+
 ```json
 {
   "account_name": "Nomad Investimentos",
   "is_investment_account": true,
   "is_payroll_account": false,
-  "total_invested": 50.00,
+  "total_invested": 50.0,
   "monthly_salary": null,
   "checking_account_balance": 31.01,
   "default_currency": "USD"
@@ -483,6 +544,7 @@ POST /market/account
 **Optional Fields:** Account type flags, balances
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -495,11 +557,13 @@ POST /market/account
 ```
 
 #### Get All Accounts
+
 ```
 GET /market/accounts
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -509,7 +573,7 @@ GET /market/accounts
       "account_name": "Nomad Investimentos",
       "is_investment_account": true,
       "is_payroll_account": false,
-      "total_invested": 50.00,
+      "total_invested": 50.0,
       "default_currency": "USD"
     }
   ],
@@ -518,6 +582,7 @@ GET /market/accounts
 ```
 
 #### Get Dividend Gains
+
 ```
 GET /market/dividend-gains
 ```
@@ -525,13 +590,14 @@ GET /market/dividend-gains
 Returns all dividend payments recorded in the system.
 
 **Response:**
+
 ```json
 {
   "success": true,
   "data": [
     {
       "asset_id": "uuid",
-      "dividend_amount": 10.50,
+      "dividend_amount": 10.5,
       "dividend_type": "dividend",
       "ex_dividend_date": "2025-12-15T00:00:00",
       "payment_date": "2025-12-25T00:00:00"
@@ -546,11 +612,13 @@ Returns all dividend payments recorded in the system.
 ## MAGFI-INGESTOR Endpoints
 
 ### Health
+
 ```
 GET /health
 ```
 
 ### Ingest News
+
 ```
 POST /ingest/news
 ```
@@ -558,23 +626,27 @@ POST /ingest/news
 Triggers news collection from RSS feeds and AI sentiment analysis.
 
 **Response:**
+
 ```json
 {
   "success": true,
-  "data": {"ingested_count": 15},
+  "data": { "ingested_count": 15 },
   "message": "Successfully ingested 15 news items"
 }
 ```
 
 ### Get Raw News
+
 ```
 GET /ingest/news/raw?limit=100
 ```
 
 **Query Parameters:**
+
 - `limit` (optional): Maximum number of news items (default: 100)
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -591,6 +663,7 @@ GET /ingest/news/raw?limit=100
 ```
 
 ### Get Analyzed News
+
 ```
 GET /ingest/news/analyzed?limit=100
 ```
@@ -598,9 +671,11 @@ GET /ingest/news/analyzed?limit=100
 Returns AI-processed news with sentiment analysis.
 
 **Query Parameters:**
+
 - `limit` (optional): Maximum number of news items (default: 100)
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -622,11 +697,13 @@ Returns AI-processed news with sentiment analysis.
 ## MAGFI-PREDICTOR Endpoints
 
 ### Health
+
 ```
 GET /health
 ```
 
 ### Get Market Predictions
+
 ```
 GET /predict
 ```
@@ -634,6 +711,7 @@ GET /predict
 Generates market-wide predictions based on sentiment analysis.
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -641,7 +719,7 @@ Generates market-wide predictions based on sentiment analysis.
     {
       "ticker": "AAPL",
       "current_price": 273.67,
-      "predicted_price": 275.50,
+      "predicted_price": 275.5,
       "confidence": 0.72,
       "direction": "bullish",
       "analysis_based_on_news_items": 3
@@ -652,21 +730,24 @@ Generates market-wide predictions based on sentiment analysis.
 ```
 
 ### Get Asset-Specific Prediction
+
 ```
 GET /predict/{ticker}
 ```
 
 **Path Parameters:**
+
 - `ticker` (required): Stock ticker symbol (e.g., AAPL, IBM)
 
 **Response:**
+
 ```json
 {
   "success": true,
   "data": {
     "ticker": "AAPL",
     "current_price": 273.67,
-    "predicted_price": 275.50,
+    "predicted_price": 275.5,
     "confidence": 0.72,
     "direction": "bullish",
     "analysis_based_on_news_items": 3
@@ -740,25 +821,25 @@ All services return consistent error format:
 
 ```bash
 # GET request
-curl http://localhost:8000/health
+curl http://localhost:8100/health
 
 # POST request
-curl -X POST http://localhost:8000/market/asset \
+curl -X POST http://localhost:8100/market/asset \
   -H "Content-Type: application/json" \
   -d '{"name":"AAPL","current_price":273.67}'
 
 # PUT request
-curl -X PUT "http://localhost:8000/market/asset?tickerSymbol=AAPL" \
+curl -X PUT "http://localhost:8100/market/asset?tickerSymbol=AAPL" \
   -H "Content-Type: application/json" \
   -d '{"current_price":275.00}'
 
 # DELETE request
-curl -X DELETE "http://localhost:8000/market/asset?tickerSymbol=AAPL"
+curl -X DELETE "http://localhost:8100/market/asset?tickerSymbol=AAPL"
 ```
 
 ### Using Swagger UI
 
-1. Go to http://localhost:8000/docs (magfi-core)
+1. Go to http://localhost:8100/docs (magfi-core)
 2. Click on endpoint
 3. Click "Try it out"
 4. Fill parameters/body
@@ -770,12 +851,12 @@ curl -X DELETE "http://localhost:8000/market/asset?tickerSymbol=AAPL"
 import requests
 
 # Get all assets
-response = requests.get("http://localhost:8000/market/assets")
+response = requests.get("http://localhost:8100/market/assets")
 assets = response.json()["data"]
 
 # Create asset
 response = requests.post(
-    "http://localhost:8000/market/asset",
+    "http://localhost:8100/market/asset",
     json={
         "name": "MSFT",
         "current_price": 410.50,
@@ -790,30 +871,30 @@ print(response.json())
 
 ## Endpoint Summary Table
 
-| Method | Path | Purpose |
-|--------|------|---------|
-| GET | /health | Service health |
-| GET | /config | All configs |
-| GET | /config?configName=X | Specific config |
-| PUT | /config | Update config |
-| POST | /market/asset | Create asset |
-| GET | /market/assets | All assets |
-| GET | /market/asset | Specific asset |
-| PUT | /market/asset | Update asset |
-| DELETE | /market/asset | Delete asset |
-| POST | /market/currency | Create currency |
-| GET | /market/currencies | All currencies |
-| GET | /market/currency | Specific currency |
-| PUT | /market/currency | Update currency |
-| DELETE | /market/currency | Delete currency |
-| GET | /market/drop-alert/assets | Buy-ready assets |
-| GET | /market/drop-alert/currencies | Buy-ready currencies |
-| GET | /market/report/prediction | Market predictions |
-| POST | /market/account | Create account |
-| GET | /market/accounts | All accounts |
-| GET | /market/dividend-gains | Dividends |
-| POST | /ingest/news | Collect news |
-| GET | /ingest/news/raw | Raw news |
-| GET | /ingest/news/analyzed | Analyzed news |
-| GET | /predict | Market predictions |
-| GET | /predict/{ticker} | Asset prediction |
+| Method | Path                          | Purpose              |
+| ------ | ----------------------------- | -------------------- |
+| GET    | /health                       | Service health       |
+| GET    | /config                       | All configs          |
+| GET    | /config?configName=X          | Specific config      |
+| PUT    | /config                       | Update config        |
+| POST   | /market/asset                 | Create asset         |
+| GET    | /market/assets                | All assets           |
+| GET    | /market/asset                 | Specific asset       |
+| PUT    | /market/asset                 | Update asset         |
+| DELETE | /market/asset                 | Delete asset         |
+| POST   | /market/currency              | Create currency      |
+| GET    | /market/currencies            | All currencies       |
+| GET    | /market/currency              | Specific currency    |
+| PUT    | /market/currency              | Update currency      |
+| DELETE | /market/currency              | Delete currency      |
+| GET    | /market/drop-alert/assets     | Buy-ready assets     |
+| GET    | /market/drop-alert/currencies | Buy-ready currencies |
+| GET    | /market/report/prediction     | Market predictions   |
+| POST   | /market/account               | Create account       |
+| GET    | /market/accounts              | All accounts         |
+| GET    | /market/dividend-gains        | Dividends            |
+| POST   | /ingest/news                  | Collect news         |
+| GET    | /ingest/news/raw              | Raw news             |
+| GET    | /ingest/news/analyzed         | Analyzed news        |
+| GET    | /predict                      | Market predictions   |
+| GET    | /predict/{ticker}             | Asset prediction     |

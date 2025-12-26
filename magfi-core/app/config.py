@@ -17,7 +17,7 @@ class Settings(BaseSettings):
     openai_api_key: Optional[str] = None
     gemini_api_key: Optional[str] = None
     
-    api_port: int = 8000
+    api_port: int = 8100
     api_host: str = "0.0.0.0"
     log_level: str = "INFO"
     

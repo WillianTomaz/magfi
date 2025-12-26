@@ -3,6 +3,7 @@
 ## 🚀 Fast Setup (5 minutes with Docker)
 
 ### Prerequisites
+
 - Docker & Docker Compose installed
 - Supabase account (free tier: supabase.com)
 - OpenAI or Gemini API key (optional for news analysis)
@@ -39,9 +40,9 @@ docker-compose up --build
 
 ```bash
 # In another terminal
-curl http://localhost:8000/health
-curl http://localhost:8001/health
-curl http://localhost:8002/health
+curl http://localhost:8100/health
+curl http://localhost:8200/health
+curl http://localhost:8300/health
 
 # All should return:
 # {"status":"healthy","app_name":"magfi-core|ingestor|predictor","environment":"development"}
@@ -49,9 +50,9 @@ curl http://localhost:8002/health
 
 ### Step 4: Access APIs
 
-- **magfi-core** (main API): http://localhost:8000/docs
-- **magfi-ingestor** (news): http://localhost:8001/docs
-- **magfi-predictor** (predictions): http://localhost:8002/docs
+- **magfi-core** (main API): http://localhost:8100/docs
+- **magfi-ingestor** (news): http://localhost:8200/docs
+- **magfi-predictor** (predictions): http://localhost:8300/docs
 
 ---
 
@@ -61,7 +62,7 @@ curl http://localhost:8002/health
 
 ```bash
 # 1. Create an asset
-curl -X POST http://localhost:8000/market/asset \
+curl -X POST http://localhost:8100/market/asset \
   -H "Content-Type: application/json" \
   -d '{
     "name": "AAPL",
@@ -81,19 +82,21 @@ curl -X POST http://localhost:8000/market/asset \
 
 ### Using Swagger UI
 
-1. Go to http://localhost:8000/docs
+1. Go to http://localhost:8100/docs
 2. Click "Try it out" on POST /market/asset
 3. Paste this JSON:
+
 ```json
 {
   "name": "PETR4",
   "currency_code": "BRL",
   "current_price": 31.01,
-  "target_price": 29.00,
+  "target_price": 29.0,
   "drop_alert": true,
   "sector": "Energy"
 }
 ```
+
 4. Click "Execute"
 
 ---
@@ -104,12 +107,12 @@ curl -X POST http://localhost:8000/market/asset \
 
 ```bash
 # Create asset with target price
-curl -X POST http://localhost:8000/market/asset \
+curl -X POST http://localhost:8100/market/asset \
   -H "Content-Type: application/json" \
   -d '{"name":"IBM","current_price":180,"target_price":175,"drop_alert":true}'
 
 # Check if price target is met (run daily)
-curl http://localhost:8000/market/drop-alert/assets
+curl http://localhost:8100/market/drop-alert/assets
 
 # Response shows assets ready to buy
 ```
@@ -118,7 +121,7 @@ curl http://localhost:8000/market/drop-alert/assets
 
 ```bash
 # Create currency
-curl -X POST http://localhost:8000/market/currency \
+curl -X POST http://localhost:8100/market/currency \
   -H "Content-Type: application/json" \
   -d '{
     "name": "USD",
@@ -128,30 +131,30 @@ curl -X POST http://localhost:8000/market/currency \
   }'
 
 # Check when USD hits 5.00 BRL
-curl http://localhost:8000/market/drop-alert/currencies
+curl http://localhost:8100/market/drop-alert/currencies
 ```
 
 ### Workflow 3: Get AI Predictions
 
 ```bash
 # Get market predictions (aggregated from all assets + news)
-curl http://localhost:8000/market/report/prediction
+curl http://localhost:8100/market/report/prediction
 
 # Or get specific asset prediction
-curl http://localhost:8002/predict/AAPL
+curl http://localhost:8300/predict/AAPL
 ```
 
 ### Workflow 4: Ingest Financial News
 
 ```bash
 # Manually trigger news collection
-curl -X POST http://localhost:8001/ingest/news
+curl -X POST http://localhost:8200/ingest/news
 
 # View analyzed news (AI-processed)
-curl http://localhost:8001/ingest/news/analyzed
+curl http://localhost:8200/ingest/news/analyzed
 
 # View raw news (before AI processing)
-curl http://localhost:8001/ingest/news/raw
+curl http://localhost:8200/ingest/news/raw
 ```
 
 ---
@@ -161,15 +164,19 @@ curl http://localhost:8001/ingest/news/raw
 All responses follow this pattern:
 
 **Success:**
+
 ```json
 {
   "success": true,
-  "data": { /* actual data */ },
+  "data": {
+    /* actual data */
+  },
   "message": "Description of what happened"
 }
 ```
 
 **Error:**
+
 ```json
 {
   "success": false,
@@ -192,7 +199,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 cp .env.example .env
 # Edit .env with DATABASE_URL pointing to your local PostgreSQL
-uvicorn app.main:app --reload --port 8000
+uvicorn app.main:app --reload --port 8100
 
 # Terminal 2: magfi-ingestor
 cd magfi-ingestor
@@ -201,7 +208,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 cp .env.example .env
 # Configure .env
-uvicorn app.main:app --reload --port 8001
+uvicorn app.main:app --reload --port 8200
 
 # Terminal 3: magfi-predictor
 cd magfi-predictor
@@ -210,7 +217,7 @@ source venv/activate
 pip install -r requirements.txt
 cp .env.example .env
 # Configure .env
-uvicorn app.main:app --reload --port 8002
+uvicorn app.main:app --reload --port 8300
 ```
 
 ### Setup PostgreSQL Locally
@@ -242,17 +249,19 @@ psql -U magfi_user -d magfi_db -f magfi-predictor/ddl/01_prediction.sql
 ### Services Won't Start
 
 **Error:** `Connection refused to database`
+
 - **Fix**: Ensure PostgreSQL is running and DATABASE_URL in .env is correct
 - Check: `docker-compose ps` to see service status
 
 **Error:** `Module not found: sqlalchemy`
+
 - **Fix**: `pip install -r requirements.txt` in each service directory
 
 ### Port Already in Use
 
 ```bash
-# Kill process using port 8000
-lsof -ti:8000 | xargs kill -9
+# Kill process using port 8100
+lsof -ti:8100 | xargs kill -9
 
 # Or use different port
 uvicorn app.main:app --port 8010
@@ -270,7 +279,7 @@ uvicorn app.main:app --port 8010
 
 1. **Read ANALYSIS.md** for deep dive into financial logic
 2. **Check individual README.md** in each service folder
-3. **Explore API docs** at http://localhost:8000/docs (Swagger UI)
+3. **Explore API docs** at http://localhost:8100/docs (Swagger UI)
 4. **Create more assets** and set different targets
 5. **Integrate with Supabase** for cloud backup
 
@@ -279,30 +288,33 @@ uvicorn app.main:app --port 8010
 ## 💡 Pro Tips
 
 ### Tip 1: Monitor Multiple Assets
+
 ```bash
 # Create portfolio of assets
 for ticker in AAPL IBM MSFT; do
-  curl -X POST http://localhost:8000/market/asset \
+  curl -X POST http://localhost:8100/market/asset \
     -H "Content-Type: application/json" \
     -d "{\"name\":\"$ticker\",\"current_price\":100,\"drop_alert\":true}"
 done
 
 # Check all at once
-curl http://localhost:8000/market/assets
+curl http://localhost:8100/market/assets
 ```
 
 ### Tip 2: Set Different Base Currencies
+
 ```bash
 # Create config for different base currency
-curl -X PUT http://localhost:8000/config \
+curl -X PUT http://localhost:8100/config \
   -H "Content-Type: application/json" \
   -d '{"default_currency": "USD"}'
 ```
 
 ### Tip 3: Automate with Cron Job
+
 ```bash
 # Check alerts every hour
-0 * * * * curl http://localhost:8000/market/drop-alert/assets >> /var/log/magfi_alerts.log
+0 * * * * curl http://localhost:8100/market/drop-alert/assets >> /var/log/magfi_alerts.log
 ```
 
 ---

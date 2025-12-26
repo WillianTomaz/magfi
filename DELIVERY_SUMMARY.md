@@ -12,7 +12,8 @@
 
 ### ✅ Three Production-Ready Microservices
 
-#### 1. **magfi-core** (Port 8000) - Main API
+#### 1. **magfi-core** (Port 8100) - Main API
+
 - ✅ 6 route modules with 23+ endpoints
 - ✅ Complete CRUD for assets, currencies, configurations
 - ✅ Drop price alert system with gap calculations
@@ -22,7 +23,8 @@
 - ✅ 5 SQL DDL files for database schema
 - ✅ Docker support with compose file
 
-#### 2. **magfi-ingestor** (Port 8001) - News Processing
+#### 2. **magfi-ingestor** (Port 8200) - News Processing
+
 - ✅ RSS feed collection from financial sources
 - ✅ OpenAI/Gemini AI sentiment analysis
 - ✅ Impact scoring and asset ticker extraction
@@ -30,7 +32,8 @@
 - ✅ 2 SQL DDL files
 - ✅ Docker support
 
-#### 3. **magfi-predictor** (Port 8002) - ML Predictions
+#### 3. **magfi-predictor** (Port 8300) - ML Predictions
+
 - ✅ Sentiment-based market predictions
 - ✅ Multi-asset prediction aggregation
 - ✅ Asset-specific predictions
@@ -43,15 +46,15 @@
 
 ## 📊 Code Statistics
 
-| Component | Count |
-|-----------|-------|
-| **Python Files** | 44 |
-| **SQL Schema Files** | 8 |
-| **Configuration Files** | 3 |
-| **Docker Files** | 7 |
-| **Documentation Files** | 7 |
-| **API Endpoints** | 23+ |
-| **Database Tables** | 30+ |
+| Component               | Count   |
+| ----------------------- | ------- |
+| **Python Files**        | 44      |
+| **SQL Schema Files**    | 8       |
+| **Configuration Files** | 3       |
+| **Docker Files**        | 7       |
+| **Documentation Files** | 7       |
+| **API Endpoints**       | 23+     |
+| **Database Tables**     | 30+     |
 | **Total Lines of Code** | ~4,500+ |
 
 ---
@@ -59,53 +62,61 @@
 ## 📚 Complete Documentation Suite
 
 ### 1. **INDEX.md** ⭐
-   - Navigation guide for all documentation
-   - Quick lookup by task/topic
-   - Reading recommendations by role
+
+- Navigation guide for all documentation
+- Quick lookup by task/topic
+- Reading recommendations by role
 
 ### 2. **QUICKSTART.md** ⭐
-   - 5-minute Docker setup
-   - First API calls
-   - Common workflows
-   - Troubleshooting guide
+
+- 5-minute Docker setup
+- First API calls
+- Common workflows
+- Troubleshooting guide
 
 ### 3. **README.md**
-   - Project overview
-   - Architecture diagram
-   - Technology stack
-   - Development setup instructions
+
+- Project overview
+- Architecture diagram
+- Technology stack
+- Development setup instructions
 
 ### 4. **API_REFERENCE.md** ⭐
-   - All 23+ endpoints documented
-   - Request/response examples
-   - Query parameters explained
-   - Error handling guide
-   - Testing examples
+
+- All 23+ endpoints documented
+- Request/response examples
+- Query parameters explained
+- Error handling guide
+- Testing examples
 
 ### 5. **ANALYSIS.md**
-   - Deep financial analysis
-   - JSON structure insights
-   - Database design rationale
-   - Alert logic explanation
-   - Risk mitigation strategies
+
+- Deep financial analysis
+- JSON structure insights
+- Database design rationale
+- Alert logic explanation
+- Risk mitigation strategies
 
 ### 6. **PROJECT_STRUCTURE.md**
-   - Complete directory tree
-   - Service responsibilities matrix
-   - Data flow diagrams
-   - Database schema overview
-   - Deployment workflow
+
+- Complete directory tree
+- Service responsibilities matrix
+- Data flow diagrams
+- Database schema overview
+- Deployment workflow
 
 ### 7. **Service-Specific READMEs** (3)
-   - magfi-core/README.md
-   - magfi-ingestor/README.md
-   - magfi-predictor/README.md
+
+- magfi-core/README.md
+- magfi-ingestor/README.md
+- magfi-predictor/README.md
 
 ---
 
 ## 🔧 Technical Features
 
 ### ✅ Architecture & Design
+
 - [x] Microservices architecture (loosely coupled)
 - [x] magfi-core operates independently
 - [x] Graceful degradation when optional services unavailable
@@ -113,14 +124,16 @@
 - [x] Shared PostgreSQL database (Supabase-ready)
 
 ### ✅ Database (PostgreSQL + Supabase)
-- [x] Dimensional modeling (dim_* for slow-changing data)
-- [x] Fact tables (fct_* for fast-changing data)
+
+- [x] Dimensional modeling (dim\_\* for slow-changing data)
+- [x] Fact tables (fct\_\* for fast-changing data)
 - [x] Strategic indexing on frequently filtered columns
 - [x] Foreign key relationships
 - [x] UUID primary keys (distributed-systems-ready)
 - [x] 8 DDL files (automatic initialization in Docker)
 
 ### ✅ API Design
+
 - [x] RESTful endpoints following HTTP conventions
 - [x] Consistent response format (success/data/message/error)
 - [x] Query parameters for filtering
@@ -129,6 +142,7 @@
 - [x] Automatic Swagger UI documentation
 
 ### ✅ Python Best Practices
+
 - [x] PEP 8 compliant
 - [x] Type hints on all functions
 - [x] Async/await for I/O operations
@@ -137,6 +151,7 @@
 - [x] Separation of concerns (routes/services/models)
 
 ### ✅ Financial Logic
+
 - [x] Multi-currency support
 - [x] Price drop alert system with gap percentages
 - [x] P/L and P/VPA ratio fields (for sector comparison)
@@ -145,6 +160,7 @@
 - [x] Portfolio position tracking
 
 ### ✅ Security
+
 - [x] Environment variables for secrets (no hardcoding)
 - [x] CORS middleware configurable
 - [x] Input validation via Pydantic
@@ -153,6 +169,7 @@
 - [x] .env.example templates (no secrets exposed)
 
 ### ✅ Deployment
+
 - [x] Docker images for all 3 services
 - [x] Root docker-compose.yml (orchestrates all services + PostgreSQL)
 - [x] Individual docker-compose.yml per service
@@ -161,6 +178,7 @@
 - [x] Production-ready configurations
 
 ### ✅ Development Experience
+
 - [x] Hot reload support (--reload flag)
 - [x] Detailed error messages
 - [x] DEBUG mode for verbose logging
@@ -173,6 +191,7 @@
 ## 🚀 How to Get Started
 
 ### **Step 1: Quick Start (5 minutes)**
+
 ```bash
 cd magfi
 cp .env.example .env
@@ -181,18 +200,21 @@ docker-compose up --build
 ```
 
 ### **Step 2: Verify Services**
+
 ```bash
-curl http://localhost:8000/health
-curl http://localhost:8001/health
-curl http://localhost:8002/health
+curl http://localhost:8100/health
+curl http://localhost:8200/health
+curl http://localhost:8300/health
 ```
 
 ### **Step 3: Access APIs**
-- magfi-core: http://localhost:8000/docs
-- magfi-ingestor: http://localhost:8001/docs
-- magfi-predictor: http://localhost:8002/docs
+
+- magfi-core: http://localhost:8100/docs
+- magfi-ingestor: http://localhost:8200/docs
+- magfi-predictor: http://localhost:8300/docs
 
 ### **Step 4: Read Documentation**
+
 1. Start with [INDEX.md](./INDEX.md)
 2. Follow to [QUICKSTART.md](./QUICKSTART.md)
 3. Reference [API_REFERENCE.md](./API_REFERENCE.md) as needed
@@ -202,6 +224,7 @@ curl http://localhost:8002/health
 ## 📋 Endpoints Summary (23 Total)
 
 ### Core API (magfi-core) - 17 Endpoints
+
 ```
 Health & Config (3)
 ├─ GET    /health
@@ -235,6 +258,7 @@ Portfolio (3)
 ```
 
 ### Ingestor API (magfi-ingestor) - 3 Endpoints
+
 ```
 ├─ GET    /health
 ├─ POST   /ingest/news
@@ -243,6 +267,7 @@ Portfolio (3)
 ```
 
 ### Predictor API (magfi-predictor) - 3 Endpoints
+
 ```
 ├─ GET    /health
 ├─ GET    /predict
@@ -254,6 +279,7 @@ Portfolio (3)
 ## 📂 Key Project Files
 
 ### Core Configuration
+
 ```
 magfi/
 ├─ .env.example              # Root environment template
@@ -269,6 +295,7 @@ magfi/
 ```
 
 ### Service Structure (x3)
+
 ```
 magfi-{core,ingestor,predictor}/
 ├─ .env.example
@@ -295,6 +322,7 @@ magfi-{core,ingestor,predictor}/
 All services have `.env.example` with these variables:
 
 ### Root .env
+
 ```
 SUPABASE_URL          # PostgreSQL host (Supabase)
 SUPABASE_KEY          # Authentication
@@ -305,6 +333,7 @@ DEBUG                 # true|false
 ```
 
 ### Service-Specific
+
 ```
 magfi-core:
   - MAGFI_INGESTOR_URL
@@ -324,6 +353,7 @@ magfi-predictor:
 ## 🎓 Learning Resources Included
 
 ### In Code
+
 - **Type hints** on all functions
 - **Docstrings** in schemas
 - **Clear variable names** following conventions
@@ -331,6 +361,7 @@ magfi-predictor:
 - **Route organization** by feature
 
 ### In Documentation
+
 - **Architecture diagrams** (text-based)
 - **Data flow examples**
 - **SQL schema explanations**
@@ -338,6 +369,7 @@ magfi-predictor:
 - **Troubleshooting guide**
 
 ### Interactive
+
 - **Swagger UI** at /docs endpoints
 - **Example requests** with cURL
 - **Python code samples**
@@ -347,35 +379,41 @@ magfi-predictor:
 ## ✨ Special Features
 
 ### 1. **Drop Alert System**
+
 - Monitors current price vs target price
 - Calculates gap percentage automatically
 - Returns "time_to_buy" indicator
 - Works for both assets and currencies
 
 ### 2. **Multi-Currency Support**
+
 - Assets in different currencies (USD, BRL, EUR, etc.)
 - Configurable default currency
 - Price format: "amount/CURRENCY"
 - Exchange rate tracking
 
 ### 3. **Financial Indicators**
+
 - P/L ratio (Price/Earnings) support
 - P/VPA ratio (Price/Book Value) support
 - Sector classification for comparison
 
 ### 4. **Portfolio Management**
+
 - Multiple account types (investment, payroll, checking)
 - Account balance tracking
 - Investment portfolio composition
 - Dividend gain tracking
 
 ### 5. **AI Integration**
+
 - OpenAI sentiment analysis
 - Google Gemini support
 - RSS feed collection
 - Impact scoring
 
 ### 6. **Prediction Engine**
+
 - Sentiment-based forecasts
 - Multi-horizon predictions
 - Confidence scoring
@@ -386,20 +424,23 @@ magfi-predictor:
 ## 🚀 Deployment Ready
 
 ### Local Development
+
 ```bash
 python3.14 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
-uvicorn app.main:app --reload --port 8000
+uvicorn app.main:app --reload --port 8100
 ```
 
 ### Docker Development
+
 ```bash
 docker-compose up --build
 # All 3 services + PostgreSQL start automatically
 ```
 
 ### Production Deployment
+
 ```bash
 # Push to cloud registry (GCP, AWS, Azure, etc.)
 docker build -t your-registry/magfi-core ./magfi-core
@@ -434,6 +475,7 @@ gcloud run deploy magfi-core --image your-registry/magfi-core
 ## 🎯 What You Can Do Now
 
 ### Immediately
+
 1. ✅ Run all 3 services with Docker
 2. ✅ Create assets and currencies
 3. ✅ Set price targets and alerts
@@ -442,6 +484,7 @@ gcloud run deploy magfi-core --image your-registry/magfi-core
 6. ✅ Get AI predictions
 
 ### Short Term
+
 1. ✅ Extend with authentication (JWT)
 2. ✅ Add database migrations (Alembic)
 3. ✅ Implement rate limiting (Slowapi)
@@ -449,6 +492,7 @@ gcloud run deploy magfi-core --image your-registry/magfi-core
 5. ✅ Deploy to cloud (GCP/AWS/Azure)
 
 ### Long Term
+
 1. ✅ Mobile app integration
 2. ✅ Advanced ML models
 3. ✅ Real-time WebSocket updates
@@ -500,6 +544,7 @@ Completion Date:  December 25, 2025
 This project is **complete, documented, and ready for deployment**.
 
 All code is:
+
 - ✅ Production-grade
 - ✅ Well-documented
 - ✅ Easy to extend
@@ -512,4 +557,4 @@ All code is:
 
 **Happy Investing! 📈**
 
-*MAGFI - Your AI-Powered Financial Intelligence Platform*
+_MAGFI - Your AI-Powered Financial Intelligence Platform_

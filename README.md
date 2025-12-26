@@ -7,7 +7,7 @@ Complete financial management and market analysis platform consisting of three i
 ```
 ┌─────────────────┐
 │   magfi-core    │  Core API - Asset/Currency management, alerts, reports
-│   (port 8000)   │
+│   (port 8100)   │
 └────────┬────────┘
          │
     ┌────┴────┐
@@ -15,7 +15,7 @@ Complete financial management and market analysis platform consisting of three i
 ┌───▼──────┐  ┌─▼────────────┐
 │magfi-     │  │magfi-        │
 │ingestor   │  │predictor     │
-│(8001)     │  │(8002)        │
+│(8200)     │  │(8300)        │
 └──────────┘  └──────────────┘
 
 All connected to Supabase PostgreSQL
@@ -74,6 +74,7 @@ cp magfi-predictor/.env.example magfi-predictor/.env
 ```
 
 Update with your Supabase credentials and API keys:
+
 - SUPABASE_URL, SUPABASE_KEY
 - OPENAI_API_KEY or GEMINI_API_KEY
 - RSS feed URLs (for magfi-ingestor)
@@ -94,14 +95,14 @@ cd magfi-predictor && docker-compose up --build
 
 ```bash
 # Health checks
-curl http://localhost:8000/health
-curl http://localhost:8001/health
-curl http://localhost:8002/health
+curl http://localhost:8100/health
+curl http://localhost:8200/health
+curl http://localhost:8300/health
 
 # API Documentation
-- magfi-core: http://localhost:8000/docs
-- magfi-ingestor: http://localhost:8001/docs
-- magfi-predictor: http://localhost:8002/docs
+- magfi-core: http://localhost:8100/docs
+- magfi-ingestor: http://localhost:8200/docs
+- magfi-predictor: http://localhost:8300/docs
 ```
 
 ## Local Development
@@ -134,17 +135,17 @@ pip install -r requirements.txt
 # Terminal 1: magfi-core
 cd magfi-core
 source venv/bin/activate
-uvicorn app.main:app --reload --port 8000
+uvicorn app.main:app --reload --port 8100
 
 # Terminal 2: magfi-ingestor
 cd magfi-ingestor
 source venv/bin/activate
-uvicorn app.main:app --reload --port 8001
+uvicorn app.main:app --reload --port 8200
 
 # Terminal 3: magfi-predictor
 cd magfi-predictor
 source venv/bin/activate
-uvicorn app.main:app --reload --port 8002
+uvicorn app.main:app --reload --port 8300
 ```
 
 ## Database Setup
@@ -170,12 +171,14 @@ psql -U magfi_user -d magfi_db -f magfi-predictor/ddl/01_prediction.sql
 ## Core API Endpoints
 
 ### Health & Config
+
 - `GET /health` - Service health
 - `GET /config` - All configurations
 - `GET /config/?configName=last-update` - Specific config
 - `PUT /config` - Update configuration
 
 ### Assets
+
 - `POST /market/asset` - Create asset
 - `GET /market/assets` - List all assets
 - `GET /market/asset/?tickerSymbol=AAPL` - Get specific asset
@@ -183,6 +186,7 @@ psql -U magfi_user -d magfi_db -f magfi-predictor/ddl/01_prediction.sql
 - `DELETE /market/asset/?tickerSymbol=AAPL` - Delete asset
 
 ### Currencies
+
 - `POST /market/currency` - Create currency
 - `GET /market/currencies` - List all currencies
 - `GET /market/currency/?currencyCode=USD` - Get specific currency
@@ -190,11 +194,13 @@ psql -U magfi_user -d magfi_db -f magfi-predictor/ddl/01_prediction.sql
 - `DELETE /market/currency/?currencyCode=USD` - Delete currency
 
 ### Alerts & Analysis
+
 - `GET /market/drop-alert/assets` - Assets ready to buy
 - `GET /market/drop-alert/currencies` - Currencies ready to buy
 - `GET /market/report/prediction` - Market predictions
 
 ### Accounts & Dividends
+
 - `POST /market/account` - Create account
 - `GET /market/accounts` - List accounts
 - `GET /market/dividend-gains` - Dividend tracking
@@ -202,6 +208,7 @@ psql -U magfi_user -d magfi_db -f magfi-predictor/ddl/01_prediction.sql
 ## Request/Response Format
 
 ### Success Response
+
 ```json
 {
   "success": true,
@@ -211,6 +218,7 @@ psql -U magfi_user -d magfi_db -f magfi-predictor/ddl/01_prediction.sql
 ```
 
 ### Error Response
+
 ```json
 {
   "success": false,
@@ -222,9 +230,10 @@ psql -U magfi_user -d magfi_db -f magfi-predictor/ddl/01_prediction.sql
 ## Example Workflows
 
 ### 1. Monitor Asset Price
+
 ```bash
 # Create asset
-curl -X POST http://localhost:8000/market/asset \
+curl -X POST http://localhost:8100/market/asset \
   -H "Content-Type: application/json" \
   -d '{
     "name": "AAPL",
@@ -235,28 +244,30 @@ curl -X POST http://localhost:8000/market/asset \
   }'
 
 # Check if price target met
-curl http://localhost:8000/market/drop-alert/assets
+curl http://localhost:8100/market/drop-alert/assets
 
 # Get market prediction
-curl http://localhost:8000/market/report/prediction
+curl http://localhost:8100/market/report/prediction
 ```
 
 ### 2. Ingest Financial News
+
 ```bash
 # Manually trigger news ingestion
-curl -X POST http://localhost:8001/ingest/news
+curl -X POST http://localhost:8200/ingest/news
 
 # View processed analysis
-curl http://localhost:8001/ingest/news/analyzed
+curl http://localhost:8200/ingest/news/analyzed
 ```
 
 ### 3. Get Price Predictions
+
 ```bash
 # General market prediction
-curl http://localhost:8002/predict
+curl http://localhost:8300/predict
 
 # Asset-specific prediction
-curl http://localhost:8002/predict/AAPL
+curl http://localhost:8300/predict/AAPL
 ```
 
 ## Technologies
@@ -284,6 +295,7 @@ MIT
 ## Support
 
 For issues, check individual service READMEs:
+
 - `magfi-core/README.md`
 - `magfi-ingestor/README.md`
 - `magfi-predictor/README.md`

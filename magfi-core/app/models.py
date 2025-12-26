@@ -8,6 +8,7 @@ from app.database import Base
 
 class Config(Base):
     __tablename__ = "dim_config"
+    __table_args__ = {"schema": "app_magfi"}
     
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     config_name = Column(String(255), unique=True, nullable=False, index=True)
@@ -18,6 +19,7 @@ class Config(Base):
 
 class Asset(Base):
     __tablename__ = "dim_asset"
+    __table_args__ = {"schema": "app_magfi"}
     
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     ticker_symbol = Column(String(20), unique=True, nullable=False, index=True)
@@ -40,9 +42,10 @@ class Asset(Base):
 
 class AssetPriceHistory(Base):
     __tablename__ = "fct_asset_price_history"
+    __table_args__ = {"schema": "app_magfi"}
     
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    asset_id = Column(UUID(as_uuid=True), ForeignKey("dim_asset.id"), nullable=False)
+    asset_id = Column(UUID(as_uuid=True), ForeignKey("app_magfi.dim_asset.id"), nullable=False)
     price = Column(Numeric(15, 4), nullable=False)
     recorded_at = Column(DateTime, default=datetime.utcnow)
     
@@ -51,6 +54,7 @@ class AssetPriceHistory(Base):
 
 class Currency(Base):
     __tablename__ = "dim_currency"
+    __table_args__ = {"schema": "app_magfi"}
     
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     currency_code = Column(String(3), unique=True, nullable=False, index=True)
@@ -69,9 +73,10 @@ class Currency(Base):
 
 class CurrencyPriceHistory(Base):
     __tablename__ = "fct_currency_price_history"
+    __table_args__ = {"schema": "app_magfi"}
     
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    currency_id = Column(UUID(as_uuid=True), ForeignKey("dim_currency.id"), nullable=False)
+    currency_id = Column(UUID(as_uuid=True), ForeignKey("app_magfi.dim_currency.id"), nullable=False)
     price = Column(Numeric(15, 4), nullable=False)
     recorded_at = Column(DateTime, default=datetime.utcnow)
     
@@ -80,6 +85,7 @@ class CurrencyPriceHistory(Base):
 
 class Account(Base):
     __tablename__ = "dim_account"
+    __table_args__ = {"schema": "app_magfi"}
     
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     account_name = Column(String(255), nullable=False)
@@ -98,10 +104,11 @@ class Account(Base):
 
 class PortfolioPosition(Base):
     __tablename__ = "fct_portfolio_position"
+    __table_args__ = {"schema": "app_magfi"}
     
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    account_id = Column(UUID(as_uuid=True), ForeignKey("dim_account.id"), nullable=False)
-    asset_id = Column(UUID(as_uuid=True), ForeignKey("dim_asset.id"), nullable=False)
+    account_id = Column(UUID(as_uuid=True), ForeignKey("app_magfi.dim_account.id"), nullable=False)
+    asset_id = Column(UUID(as_uuid=True), ForeignKey("app_magfi.dim_asset.id"), nullable=False)
     quantity = Column(Numeric(20, 8), nullable=False)
     average_cost = Column(Numeric(15, 4), nullable=False)
     acquisition_date = Column(DateTime, nullable=False)
@@ -113,9 +120,10 @@ class PortfolioPosition(Base):
 
 class Dividend(Base):
     __tablename__ = "fct_dividend"
+    __table_args__ = {"schema": "app_magfi"}
     
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    asset_id = Column(UUID(as_uuid=True), ForeignKey("dim_asset.id"), nullable=False)
+    asset_id = Column(UUID(as_uuid=True), ForeignKey("app_magfi.dim_asset.id"), nullable=False)
     dividend_amount = Column(Numeric(15, 4), nullable=False)
     dividend_type = Column(String(50), nullable=False)
     ex_dividend_date = Column(DateTime, nullable=False)
@@ -125,9 +133,10 @@ class Dividend(Base):
 
 class NewsAnalysis(Base):
     __tablename__ = "fct_news_analysis"
+    __table_args__ = {"schema": "app_magfi"}
     
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    asset_id = Column(UUID(as_uuid=True), ForeignKey("dim_asset.id"), nullable=True)
+    asset_id = Column(UUID(as_uuid=True), ForeignKey("app_magfi.dim_asset.id"), nullable=True)
     news_title = Column(String, nullable=False)
     news_content = Column(String, nullable=False)
     sentiment = Column(String(20), nullable=False)
@@ -140,9 +149,10 @@ class NewsAnalysis(Base):
 
 class Prediction(Base):
     __tablename__ = "fct_prediction"
+    __table_args__ = {"schema": "app_magfi"}
     
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    asset_id = Column(UUID(as_uuid=True), ForeignKey("dim_asset.id"), nullable=True)
+    asset_id = Column(UUID(as_uuid=True), ForeignKey("app_magfi.dim_asset.id"), nullable=True)
     prediction_type = Column(String(50), nullable=False)
     predicted_price = Column(Numeric(15, 4), nullable=True)
     confidence_score = Column(Float, nullable=False)

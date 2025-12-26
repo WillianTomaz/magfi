@@ -11,7 +11,7 @@ class Settings(BaseSettings):
     supabase_url: str
     supabase_key: str
     
-    api_port: int = 8002
+    api_port: int = 8300
     api_host: str = "0.0.0.0"
     log_level: str = "INFO"
     

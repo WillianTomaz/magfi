@@ -1,32 +1,28 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from app.database import get_db
-from app.schemas import AssetSchema, AssetResponseSchema, ApiResponseSchema
+from app.schemas import AssetSchema, AssetCreateSchema, AssetResponseSchema, ApiResponseSchema
 from app.services.asset_service import AssetService
 
 router = APIRouter(prefix="/market", tags=["assets"])
 
 
 @router.post("/asset", response_model=ApiResponseSchema)
-def create_asset(asset_data: dict, db: Session = Depends(get_db)):
+def create_asset(asset_data: AssetCreateSchema, db: Session = Depends(get_db)):
     try:
-        name = asset_data.get("name")
-        if not name:
-            raise HTTPException(status_code=400, detail="Asset name is required")
-        
         schema = AssetSchema(
-            ticker_symbol=name,
-            currency_code=asset_data.get("currency_code", "BRL"),
-            current_price=asset_data.get("current_price", 0),
-            target_price=asset_data.get("target_price"),
-            drop_alert_enabled=asset_data.get("drop_alert", False),
-            target_gap_percentage=asset_data.get("target_gap_percentage"),
-            sector=asset_data.get("sector"),
-            pl_ratio=asset_data.get("pl_ratio"),
-            pvpa_ratio=asset_data.get("pvpa_ratio"),
+            ticker_symbol=asset_data.ticker_symbol or asset_data.name,
+            currency_code=asset_data.currency_code,
+            current_price=asset_data.current_price,
+            target_price=asset_data.target_price,
+            drop_alert_enabled=asset_data.drop_alert_enabled,
+            target_gap_percentage=asset_data.target_gap_percentage,
+            sector=asset_data.sector,
+            pl_ratio=asset_data.pl_ratio,
+            pvpa_ratio=asset_data.pvpa_ratio,
         )
         
-        asset = AssetService.create_asset(db, schema, asset_data.get("name"))
+        asset = AssetService.create_asset(db, schema, asset_data.name)
         
         return {
             "success": True,

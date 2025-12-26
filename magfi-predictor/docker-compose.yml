@@ -30,12 +30,12 @@ services:
       SUPABASE_KEY: ${SUPABASE_KEY}
       APP_ENV: ${APP_ENV:-development}
       DEBUG: ${DEBUG:-true}
-      API_PORT: 8002
+      API_PORT: 8300
       API_HOST: 0.0.0.0
-      MAGFI_CORE_URL: http://magfi-core:8000
-      MAGFI_INGESTOR_URL: http://magfi-ingestor:8001
+      MAGFI_CORE_URL: http://magfi-core:8100
+      MAGFI_INGESTOR_URL: http://magfi-ingestor:8200
     ports:
-      - "8002:8002"
+      - "8300:8300"
     depends_on:
       db:
         condition: service_healthy
@@ -43,7 +43,7 @@ services:
       - .:/app
     networks:
       - magfi-network
-    command: uvicorn app.main:app --host 0.0.0.0 --port 8002 --reload
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8300 --reload
 
 volumes:
   postgres_data:

@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import Optional, List
+from typing import Optional, List, Union
 from datetime import datetime
 from uuid import UUID
 
@@ -19,8 +19,21 @@ class ConfigResponseSchema(ConfigSchema):
 
 
 class AssetSchema(BaseModel):
-    ticker_symbol: str = Field(..., alias="name")
+    ticker_symbol: str
     currency_code: Optional[str] = None
+    current_price: float
+    target_price: Optional[float] = None
+    drop_alert_enabled: Optional[bool] = False
+    target_gap_percentage: Optional[float] = None
+    sector: Optional[str] = None
+    pl_ratio: Optional[float] = None
+    pvpa_ratio: Optional[float] = None
+
+
+class AssetCreateSchema(BaseModel):
+    name: str
+    ticker_symbol: Optional[str] = None
+    currency_code: Optional[str] = "BRL"
     current_price: float
     target_price: Optional[float] = None
     drop_alert_enabled: Optional[bool] = False
@@ -143,6 +156,6 @@ class HealthResponseSchema(BaseModel):
 
 class ApiResponseSchema(BaseModel):
     success: bool
-    data: Optional[dict] = None
+    data: Optional[Union[dict, List]] = None
     message: str
     error: Optional[str] = None

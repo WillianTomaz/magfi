@@ -118,10 +118,12 @@ magfi/
 
 ## 📊 Service Responsibilities
 
-### magfi-core (Port 8000) - Main API
+### magfi-core (Port 8100) - Main API
+
 **Responsibility:** Single source of truth for financial data
 
 **Provides:**
+
 - Asset CRUD operations
 - Currency CRUD operations
 - Configuration management
@@ -131,14 +133,16 @@ magfi/
 - Integration bridge to other services
 
 **Works independently:** ✅ Yes
-**Database Tables:** dim_config, dim_asset, dim_currency, dim_account, fct_*
+**Database Tables:** dim*config, dim_asset, dim_currency, dim_account, fct*\*
 
 ---
 
-### magfi-ingestor (Port 8001) - News Processing
+### magfi-ingestor (Port 8200) - News Processing
+
 **Responsibility:** Collect, analyze, and store financial news
 
 **Provides:**
+
 - RSS feed collection from financial sources
 - AI-powered sentiment analysis (OpenAI/Gemini)
 - Impact scoring for market relevance
@@ -150,10 +154,12 @@ magfi/
 
 ---
 
-### magfi-predictor (Port 8002) - ML Predictions
+### magfi-predictor (Port 8300) - ML Predictions
+
 **Responsibility:** Generate market predictions from data
 
 **Provides:**
+
 - Asset price predictions
 - Confidence scoring
 - Sentiment-based forecasts
@@ -168,6 +174,7 @@ magfi/
 ## 🗄️ Database Schema Overview
 
 ### Dimensional Tables (Slow-Changing)
+
 ```
 dim_config
 ├─ id (UUID, PK)
@@ -199,6 +206,7 @@ dim_account
 ```
 
 ### Fact Tables (Fast-Changing)
+
 ```
 fct_asset_price_history
 ├─ id (UUID, PK)
@@ -259,7 +267,7 @@ stg_news_raw (magfi-ingestor - Staging)
                          │ HTTP Requests
                          ▼
             ┌────────────────────────────┐
-            │    magfi-core:8000         │
+            │    magfi-core:8100         │
             │   (Main API Gateway)       │
             └────────┬───────────────────┘
                      │
@@ -278,12 +286,12 @@ stg_news_raw (magfi-ingestor - Staging)
         └─→ dim_account
         └─→ fct_*
 
-       magfi-ingestor:8001
+       magfi-ingestor:8200
        ├─→ RSS Feeds
        ├─→ stg_news_raw (raw data)
        └─→ fct_news_analysis (AI processed)
 
-       magfi-predictor:8002
+       magfi-predictor:8300
        ├─→ Fetch from magfi-core
        ├─→ Fetch from magfi-ingestor
        └─→ fct_prediction (ML outputs)
@@ -297,14 +305,17 @@ stg_news_raw (magfi-ingestor - Staging)
 ## 📝 Key Files to Know
 
 ### Configuration
+
 - **`.env.example`** - Template for all environment variables
 - **`app/config.py`** - Pydantic settings loader
 
 ### Database
+
 - **`ddl/`** - SQL files (CREATE TABLE statements)
 - **`app/models.py`** - SQLAlchemy ORM models
 
 ### API Routes
+
 - **`routes/health.py`** - Service health checks
 - **`routes/asset.py`** - Asset CRUD endpoints
 - **`routes/currency.py`** - Currency CRUD endpoints
@@ -312,6 +323,7 @@ stg_news_raw (magfi-ingestor - Staging)
 - **`routes/account.py`** - Portfolio management
 
 ### Business Logic
+
 - **`services/asset_service.py`** - Asset operations + drop alert logic
 - **`services/currency_service.py`** - Currency operations
 - **`services/prediction_service.py`** - Integration with magfi-predictor
@@ -319,6 +331,7 @@ stg_news_raw (magfi-ingestor - Staging)
 - **`services/ai_analyzer.py`** - OpenAI/Gemini integration
 
 ### Deployment
+
 - **`Dockerfile`** - Docker image definition
 - **`docker-compose.yml`** - Multi-service orchestration
 - **`requirements.txt`** - Python dependencies
@@ -328,14 +341,16 @@ stg_news_raw (magfi-ingestor - Staging)
 ## 🚀 Deployment Workflow
 
 ### Development
+
 ```bash
 # Each service in separate terminal
-cd magfi-core && uvicorn app.main:app --reload --port 8000
-cd magfi-ingestor && uvicorn app.main:app --reload --port 8001
-cd magfi-predictor && uvicorn app.main:app --reload --port 8002
+cd magfi-core && uvicorn app.main:app --reload --port 8100
+cd magfi-ingestor && uvicorn app.main:app --reload --port 8200
+cd magfi-predictor && uvicorn app.main:app --reload --port 8300
 ```
 
 ### Production (Docker)
+
 ```bash
 # From root directory
 docker-compose up --build
@@ -348,6 +363,7 @@ docker-compose up --build
 ```
 
 ### Cloud Deployment (Supabase + Cloud Run)
+
 ```bash
 # Push to cloud registry
 docker build -t gcr.io/project-id/magfi-core ./magfi-core
@@ -364,14 +380,16 @@ gcloud run deploy magfi-core --image gcr.io/project-id/magfi-core
 Each service has `.env.example` with required variables:
 
 ### magfi-core
+
 ```
 DATABASE_URL=postgresql://...
 SUPABASE_URL=...
-MAGFI_INGESTOR_URL=http://magfi-ingestor:8001
-MAGFI_PREDICTOR_URL=http://magfi-predictor:8002
+MAGFI_INGESTOR_URL=http://magfi-ingestor:8200
+MAGFI_PREDICTOR_URL=http://magfi-predictor:8300
 ```
 
 ### magfi-ingestor
+
 ```
 DATABASE_URL=postgresql://...
 RSS_FEEDS=url1,url2,url3
@@ -380,58 +398,64 @@ GEMINI_API_KEY=...
 ```
 
 ### magfi-predictor
+
 ```
 DATABASE_URL=postgresql://...
-MAGFI_CORE_URL=http://magfi-core:8000
-MAGFI_INGESTOR_URL=http://magfi-ingestor:8001
+MAGFI_CORE_URL=http://magfi-core:8100
+MAGFI_INGESTOR_URL=http://magfi-ingestor:8200
 ```
 
 ---
 
 ## 📖 Documentation Files
 
-| File | Purpose |
-|------|---------|
-| `README.md` | Project overview + setup |
-| `QUICKSTART.md` | 5-minute getting started guide |
-| `ANALYSIS.md` | Deep financial/architecture analysis |
-| `API_REFERENCE.md` | Complete endpoint documentation |
-| `magfi-core/README.md` | Core service details |
-| `magfi-ingestor/README.md` | Ingestor service details |
-| `magfi-predictor/README.md` | Predictor service details |
+| File                        | Purpose                              |
+| --------------------------- | ------------------------------------ |
+| `README.md`                 | Project overview + setup             |
+| `QUICKSTART.md`             | 5-minute getting started guide       |
+| `ANALYSIS.md`               | Deep financial/architecture analysis |
+| `API_REFERENCE.md`          | Complete endpoint documentation      |
+| `magfi-core/README.md`      | Core service details                 |
+| `magfi-ingestor/README.md`  | Ingestor service details             |
+| `magfi-predictor/README.md` | Predictor service details            |
 
 ---
 
 ## 🎯 Quick Reference
 
 ### Start Services
+
 ```bash
 docker-compose up --build                    # All services
 cd magfi-core && docker-compose up --build   # Single service
 ```
 
 ### Check Health
+
 ```bash
-curl http://localhost:8000/health            # Core
-curl http://localhost:8001/health            # Ingestor
-curl http://localhost:8002/health            # Predictor
+curl http://localhost:8100/health            # Core
+curl http://localhost:8200/health            # Ingestor
+curl http://localhost:8300/health            # Predictor
 ```
 
 ### Create Test Data
+
 ```bash
-curl -X POST http://localhost:8000/market/asset \
+curl -X POST http://localhost:8100/market/asset \
   -H "Content-Type: application/json" \
   -d '{"name":"AAPL","current_price":273.67,"drop_alert":true}'
 ```
 
 ### View API Docs
+
 ```
-http://localhost:8000/docs                   # Core Swagger
-http://localhost:8001/docs                   # Ingestor Swagger
-http://localhost:8002/docs                   # Predictor Swagger
+http://localhost:8100/docs                   # Core Swagger
+http://localhost:8200/docs                   # Ingestor Swagger
+http://localhost:8300/docs                   # Predictor Swagger
 ```
 
 ### Database Connection
+
 ```bash
 psql -U magfi_user -d magfi_db -h localhost
 ```
@@ -469,7 +493,7 @@ psql -U magfi_user -d magfi_db -h localhost
 3. **Comments**: Only when necessary, keep concise
 4. **Tests**: Write tests for new features
 5. **Commits**: Clear, atomic commits
-6. **Branches**: feature/*, bugfix/*, docs/* naming
+6. **Branches**: feature/_, bugfix/_, docs/\* naming
 
 ---
 

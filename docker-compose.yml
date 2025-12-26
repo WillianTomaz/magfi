@@ -28,16 +28,16 @@ services:
       DATABASE_URL: postgresql://magfi_user:magfi_password@postgres:5432/magfi_db
       SUPABASE_URL: ${SUPABASE_URL:-https://example.supabase.co}
       SUPABASE_KEY: ${SUPABASE_KEY:-example}
-      MAGFI_INGESTOR_URL: http://magfi-ingestor:8001
-      MAGFI_PREDICTOR_URL: http://magfi-predictor:8002
+      MAGFI_INGESTOR_URL: http://magfi-ingestor:8200
+      MAGFI_PREDICTOR_URL: http://magfi-predictor:8300
       OPENAI_API_KEY: ${OPENAI_API_KEY}
       GEMINI_API_KEY: ${GEMINI_API_KEY}
       APP_ENV: ${APP_ENV:-development}
       DEBUG: ${DEBUG:-true}
-      API_PORT: 8000
+      API_PORT: 8100
       API_HOST: 0.0.0.0
     ports:
-      - "8000:8000"
+      - "8100:8100"
     depends_on:
       postgres:
         condition: service_healthy
@@ -45,7 +45,7 @@ services:
       - ./magfi-core:/app
     networks:
       - magfi-network
-    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8100 --reload
 
   magfi-ingestor:
     build: ./magfi-ingestor
@@ -58,12 +58,12 @@ services:
       GEMINI_API_KEY: ${GEMINI_API_KEY}
       APP_ENV: ${APP_ENV:-development}
       DEBUG: ${DEBUG:-true}
-      API_PORT: 8001
+      API_PORT: 8200
       API_HOST: 0.0.0.0
       RSS_FEEDS: ${RSS_FEEDS:-https://feeds.bloomberg.com/markets/news.rss}
       SENTIMENT_ANALYSIS_MODEL: ${SENTIMENT_ANALYSIS_MODEL:-openai}
     ports:
-      - "8001:8001"
+      - "8200:8200"
     depends_on:
       postgres:
         condition: service_healthy
@@ -71,7 +71,7 @@ services:
       - ./magfi-ingestor:/app
     networks:
       - magfi-network
-    command: uvicorn app.main:app --host 0.0.0.0 --port 8001 --reload
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8200 --reload
 
   magfi-predictor:
     build: ./magfi-predictor
@@ -82,12 +82,12 @@ services:
       SUPABASE_KEY: ${SUPABASE_KEY:-example}
       APP_ENV: ${APP_ENV:-development}
       DEBUG: ${DEBUG:-true}
-      API_PORT: 8002
+      API_PORT: 8300
       API_HOST: 0.0.0.0
-      MAGFI_CORE_URL: http://magfi-core:8000
-      MAGFI_INGESTOR_URL: http://magfi-ingestor:8001
+      MAGFI_CORE_URL: http://magfi-core:8100
+      MAGFI_INGESTOR_URL: http://magfi-ingestor:8200
     ports:
-      - "8002:8002"
+      - "8300:8300"
     depends_on:
       postgres:
         condition: service_healthy
@@ -97,7 +97,7 @@ services:
       - ./magfi-predictor:/app
     networks:
       - magfi-network
-    command: uvicorn app.main:app --host 0.0.0.0 --port 8002 --reload
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8300 --reload
 
 volumes:
   postgres_data:
