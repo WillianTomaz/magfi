@@ -65,11 +65,10 @@ curl http://localhost:8300/health
 curl -X POST http://localhost:8100/market/asset \
   -H "Content-Type: application/json" \
   -d '{
-    "name": "AAPL",
-    "currency_code": "USD",
-    "current_price": 273.67,
-    "target_price": 270.00,
-    "drop_alert": true
+    "name": "Petroleo Brasileiro SA Petrobras Preference Shares",
+    "ticker_symbol": "PETR4",
+    "currency_code": "BRL",
+    "current_price": 30.31
   }'
 
 # Response:
