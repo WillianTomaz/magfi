@@ -1,3 +1,6 @@
+-- Create a schema 'app_magfi':
+CREATE SCHEMA app_magfi;
+
 -- Grant permissions to postgres user on app_magfi schema
 GRANT USAGE ON SCHEMA app_magfi TO postgres;
 

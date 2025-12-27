@@ -18,7 +18,7 @@ The system continuously monitors assets and currencies, comparing current market
 
 ## Technology Stack
 
-- **Python 3.14**
+- **Python 3.13**
 - **FastAPI** - Async web framework
 - **PostgreSQL + Supabase** - Data persistence
 - **Pydantic** - Data validation
@@ -29,7 +29,7 @@ The system continuously monitors assets and currencies, comparing current market
 
 ### Prerequisites
 
-- Python 3.14
+- Python 3.13
 - PostgreSQL 15+
 - pip & virtualenv
 
@@ -41,7 +41,7 @@ git clone <repository-url>
 cd magfi/magfi-core
 
 # Create virtual environment
-python3.14 -m venv venv
+python3.13 -m venv venv
 source venv/bin/activate  # Linux/macOS
 # or
 venv\Scripts\activate  # Windows

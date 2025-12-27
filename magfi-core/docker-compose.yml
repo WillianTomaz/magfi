@@ -3,18 +3,18 @@ version: '3.8'
 services:
   db:
     image: postgres:15-alpine
-    container_name: magfi_db
+    container_name: postgres_db
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-magfi_user}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-magfi_password}
-      POSTGRES_DB: ${POSTGRES_DB:-magfi_db}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-postgres_db}
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./ddl:/docker-entrypoint-initdb.d
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-magfi_user}"]
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -25,7 +25,7 @@ services:
     build: .
     container_name: magfi_core
     environment:
-      DATABASE_URL: postgresql://magfi_user:magfi_password@db:5432/magfi_db
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/postgres_db
       SUPABASE_URL: ${SUPABASE_URL}
       SUPABASE_KEY: ${SUPABASE_KEY}
       MAGFI_INGESTOR_URL: http://magfi-ingestor:8200
